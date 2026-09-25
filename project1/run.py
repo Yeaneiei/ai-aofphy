@@ -3,8 +3,8 @@ import importlib
 import numpy as np
 import random
 
-from pacman_module.pacman import runGame
-from pacman_module.ghostAgents import (
+from project1.pacman_module.pacman import runGame
+from project1.pacman_module.ghostAgents import (
     DumbyGhost,
     GreedyGhost,
     SmartyGhost,

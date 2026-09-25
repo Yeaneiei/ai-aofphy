@@ -1,5 +1,5 @@
-from pacman_module.game import Agent, Directions
-from pacman_module.graphicsUtils import keys_waiting, keys_pressed
+from project1.pacman_module.game import Agent, Directions
+from project1.pacman_module.graphicsUtils import keys_waiting, keys_pressed
 
 
 class PacmanAgent(Agent):

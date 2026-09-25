@@ -2,8 +2,8 @@ import importlib
 import os
 from argparse import ArgumentParser, ArgumentTypeError
 import random
-from pacman_module.pacman import runGame
-from pacman_module.ghostAgents import\
+from project2.pacman_module.pacman import runGame
+from project2.pacman_module.ghostAgents import\
     ConfusedGhost, AfraidGhost, ScaredGhost
 import numpy as np
 

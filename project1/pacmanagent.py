@@ -1,4 +1,4 @@
-from pacman_module.game import Agent, Directions
+from project1.pacman_module.game import Agent, Directions
 
 
 class PacmanAgent(Agent):

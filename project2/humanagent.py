@@ -1,8 +1,8 @@
 import random
 
-from pacman_module.game import Agent
-from pacman_module.pacman import Directions
-from pacman_module.graphicsUtils import keys_waiting, keys_pressed
+from project2.pacman_module.game import Agent
+from project2.pacman_module.pacman import Directions
+from project2.pacman_module.graphicsUtils import keys_waiting, keys_pressed
 
 
 class PacmanAgent(Agent):

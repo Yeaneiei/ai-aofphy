@@ -1,8 +1,8 @@
 # Complete this class for all parts of the project
 
-from pacman_module.game import Agent
+from project2.pacman_module.game import Agent
 import numpy as np
-from pacman_module import util
+from project2.pacman_module import util
 from scipy.stats import binom
 
 

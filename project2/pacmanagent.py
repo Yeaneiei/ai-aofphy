@@ -1,7 +1,7 @@
 # Complete this class for all parts of the project
 
-from pacman_module.game import Agent
-from pacman_module.pacman import Directions
+from project2.pacman_module.game import Agent
+from project2.pacman_module.pacman import Directions
 
 
 class PacmanAgent(Agent):

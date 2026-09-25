@@ -39,14 +39,15 @@ code to run a game.  This file is divided into three sections:
 To play your first game, type 'python pacman.py' from the command line.
 The keys are 'a', 's', 'd', and 'w' to move (or arrow keys).  Have fun!
 """
+from . import graphicsDisplay, layout
 from .game import GameStateData
 from .game import Game
 from .game import Directions
 from .game import Actions
 from .util import nearestPoint
 from .util import manhattanDistance
-from . import textDisplay, graphicsDisplay
-from . import util, layout
+from . import textDisplay
+from . import util
 import sys
 import types
 import time
@@ -830,7 +831,7 @@ def loadAgent(pacman, nographics):
 
 def replayGame(layout, actions, display):
     import pacmanAgents
-    import ghostAgents
+    import project1.pacman_module.ghostAgents as ghostAgents
     rules = ClassicGameRules()
     agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.RandomGhost(i + 1)
                                              for i in range(layout.getNumGhosts())]
