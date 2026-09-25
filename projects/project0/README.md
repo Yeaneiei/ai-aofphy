@@ -53,6 +53,7 @@ Each of your agents will be evaluated against new mazes, some being designed to 
 
 ```console
 $ python run.py --agentfile dfs.py --layout medium
+```
 
 **การประเมินผล (Evaluation)**
 
@@ -70,3 +71,83 @@ $ python run.py --agentfile dfs.py --layout medium
 และจำนวน node ที่ขยายจะถูกนำมาพิจารณาด้วย (ยิ่งน้อยยิ่งดี)
 	•	รูปแบบการเขียนโค้ด (Code style) (5%)
 จะไม่ได้คะแนนถ้าโค้ดของคุณไม่เป็นไปตามมาตรฐาน PEP-8
+
+## ไฟล์ที่ทำเสร็จแล้ว
+
+- `bfs.py`: BFS ใช้คิว FIFO และบันทึกสถานะที่พบตั้งแต่เข้าคิว
+  เพื่อหาเส้นทางชนะที่ใช้จำนวนก้าวน้อยที่สุด
+- `astar.py`: A* ใช้ต้นทุน `จำนวนก้าว + 5 × จำนวนแคปซูลที่กิน`
+  เพื่อให้ได้คะแนนสูงสุดในด่านที่ไม่มีผี
+- `dfs.py`: เติมทั้ง `key` และ DFS ที่ยังเว้นว่างในไฟล์ต้นฉบับ
+- `test_search.py`: ทดสอบเส้นทาง การคิดคะแนน สถานะปลายทาง
+  อาหารที่เข้าไม่ถึง และเขาวงกตสุ่ม 20 แบบ โดยเทียบกับ UCS
+- `requirements.txt`: ไลบรารีที่เกมต้องใช้
+
+สถานะค้นหาประกอบด้วยตำแหน่ง Pacman อาหารที่เหลือ และแคปซูลที่เหลือ
+ทุกการขยายสถานะเกมใช้ `generatePacmanSuccessors()` ตาม API ของโจทย์
+A* คำนวณ heuristic จากระยะทางจริงตามช่องทางเดินไปอาหารที่ใกล้ที่สุด
+รวมกับน้ำหนัก minimum spanning tree (MST) ของอาหารที่เหลือ
+โดยอ่านกำแพงผ่าน `getWalls()` และเก็บผลไว้ใช้ซ้ำ
+ค่านี้ไม่เกินต้นทุนจริง เพราะไม่รวมค่าแคปซูลและไม่บังคับให้เดินครบเส้นทางจริง
+เมื่อพบเส้นทางที่ถูกกว่า A* จะเปิดสถานะนั้นให้ค้นหาใหม่
+
+เมื่อชนะ รางวัลอาหารและโบนัสชนะคงที่ จึงลดต้นทุนข้างต้นแทนการเพิ่มคะแนนได้
+BFS อาจได้คะแนนต่ำกว่า A* เพราะเส้นทางสั้นที่สุดอาจผ่านแคปซูล
+DFS ไม่รับประกันจำนวนก้าวหรือคะแนนที่ดีที่สุด
+ทั้งสามตัวแทนนี้ออกแบบสำหรับ Project 0 ที่ไม่มีผี
+
+## วิธีเซ็ตอัพและรัน (Windows PowerShell)
+
+ต้องมี Python 3 และ NumPy; ทดสอบโค้ดนี้ด้วย Python 3.12
+หากยังไม่มีคำสั่ง `py` หรือ `python` ให้ติดตั้ง Python ก่อน
+แล้วเปิด terminal ใหม่ หากเครื่องใช้คำสั่ง `python` ให้ใช้แทน `py` ในการสร้าง venv
+
+```powershell
+cd D:\GitHub\ai-aofphy\projects\project0
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+เรียก Python ใน venv โดยตรงได้โดยไม่ต้อง activate:
+
+```powershell
+# แสดงเกมเป็นหน้าต่าง (ต้องมี Tkinter)
+.\.venv\Scripts\python.exe run.py --agentfile bfs.py --layout small
+.\.venv\Scripts\python.exe run.py --agentfile astar.py --layout medium
+
+# แสดงคะแนน เวลา และจำนวนโหนด โดยไม่เปิดหน้าต่าง
+.\.venv\Scripts\python.exe run.py --agentfile astar.py --layout large --silentdisplay
+
+# ทดสอบความถูกต้อง
+.\.venv\Scripts\python.exe -m unittest -v test_search
+
+# ตรวจ PEP-8 ของไฟล์ที่แก้/เพิ่ม
+.\.venv\Scripts\python.exe -m pip install pycodestyle
+.\.venv\Scripts\python.exe -m pycodestyle bfs.py astar.py dfs.py test_search.py
+```
+
+เลือกด่านได้เป็น `small`, `medium`, `large` และเปลี่ยน agent เป็น `dfs.py` ได้
+สำหรับ Linux/macOS ใช้ `python3 -m venv .venv` แล้วเรียก `.venv/bin/python`
+แทน `.\.venv\Scripts\python.exe` จากโฟลเดอร์ `projects/project0`
+หากใช้ conda ตาม README หลัก ให้ activate environment ติดตั้ง NumPy
+แล้วใช้ `python run.py ...` ได้เลย
+ตัวเลือกที่ตรงกับ `run.py` ของ Project 0 คือ `--agentfile` และ `--silentdisplay`
+
+## ผลการรันทดสอบ
+
+ผลจากการรันแบบไม่เปิดหน้าต่างบน Python 3.12:
+
+| Agent | ด่าน | คะแนน | โหนดที่ขยาย | เวลาคำนวณ (วินาที) |
+| --- | --- | ---: | ---: | ---: |
+| BFS | small | 497 | 23 | 0.002 |
+| BFS | medium | 565 | 25,761 | 4.879 |
+| BFS | large | 429 | 3,312 | 1.266 |
+| A* | small | 500 | 11 | 0.002 |
+| A* | medium | 568 | 282 | 0.069 |
+| A* | large | 433 | 223 | 0.152 |
+
+ทั้ง 6 ครั้งชนะเกม เวลาอาจเปลี่ยนตามเครื่องและแต่ละรอบ
+การทดสอบอัตโนมัติผ่าน 5 กลุ่ม รวมเขาวงกตสุ่ม 20 แบบ
+กรณีทดสอบแคปซูลยืนยันว่า A* เลือกเดิน 6 ก้าวโดยไม่กินแคปซูล
+แทนเส้นทาง BFS 4 ก้าวที่กินแคปซูล จึงได้คะแนนมากกว่า
+ผลนี้ไม่ได้แทนการประเมินด้วยด่านลับของผู้สอน
