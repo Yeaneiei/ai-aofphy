@@ -8,7 +8,7 @@ You are requested to deliver
 
 ## Instructions
 
-You can download the [archive](../project0.zip?raw=true) of the project into a directory of your choice. In this first part of the project, only food dots, capsules and Pacman are in the maze. Your task is to design an intelligent agent based on search algorithms (see [Lecture 2]) for **maximizing** the score. You are asked to implement the **breadth-first search (BFS)** and **A\*** algorithms. We recommend to implement them in this order. It is mandatory to use only the [API](..#api) to retrieve game information.
+Use the files in the `project0` directory of this repository; no separate archive is required. In this first part of the project, only food dots, capsules and Pacman are in the maze. Your task is to design an intelligent agent based on search algorithms (see [Lecture 2]) for **maximizing** the score. You are asked to implement the **breadth-first search (BFS)** and **A\*** algorithms. We recommend to implement them in this order. It is mandatory to use only the [API](..#api) to retrieve game information.
 
 To help you, we provide an implementation of the DFS algorithm in the `dfs.py` file. However, the `key` function is not finished. Once you have activated your Pacman environment (see [installation](..#installation)), you can test the DFS algorithm using the following commands:
 ```console
@@ -32,7 +32,7 @@ Each of your agents will be evaluated against new mazes, some being designed to 
 
 ## คำแนะนำ (Instructions)
 
-คุณสามารถดาวน์โหลด [ไฟล์โครงการ](../project0.zip?raw=true) ไปยังโฟลเดอร์ที่คุณต้องการ ในส่วนแรกของโครงการนี้ ภายในเขาวงกต (maze) จะมีเพียงจุดอาหาร (food dots), แคปซูล (capsules) และ Pacman เท่านั้น  
+ใช้ไฟล์ในโฟลเดอร์ `project0` ของ repository นี้ได้เลย โดยไม่ต้องดาวน์โหลดหรือแตกไฟล์ ZIP เพิ่ม ในส่วนแรกของโครงการนี้ ภายในเขาวงกต (maze) จะมีเพียงจุดอาหาร (food dots), แคปซูล (capsules) และ Pacman เท่านั้น  
 **ภารกิจของคุณ** คือ การออกแบบตัวแทนอัจฉริยะ (intelligent agent) โดยใช้อัลกอริทึมค้นหา (search algorithms) (ดู [Lecture 2])  
 โดยมีเป้าหมายเพื่อ **เพิ่มคะแนน (score) ให้ได้มากที่สุด**
 

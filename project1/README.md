@@ -12,7 +12,7 @@
 
 งานของคุณคือออกแบบเอเจนต์อัจฉริยะโดยใช้อัลกอริทึมการค้นหาแบบปะทะ/แข่งขัน (adversarial search) (ดู [Lecture 3](https://github.com/aofphy/SCI193611_ARTIFICIAL_INTELLIGENCE/blob/main/slide/lecture3_th.pdf)) เพื่อ **ทำคะแนนของแพคแมนให้มากที่สุด** โดยให้คุณนำอัลกอริทึม **Minimax** และ **H-Minimax** ไปใช้ โดยถือว่าแพคแมนและผีเป็นผู้เล่นสองฝ่าย แนะนำให้พัฒนาอัลกอริทึมตามลำดับนี้ **กำหนดให้ใช้เฉพาะ [API](..#api)** ในการดึงข้อมูลของเกม เลย์เอาต์ที่มีแคปซูลจะไม่ถูกนำมาพิจารณา แต่หากต้องการ คุณอาจคำนึงถึงไว้ได้ การนำ Minimax ไปใช้ของคุณ **ไม่จำเป็นต้องรันได้** บนเลย์เอาต์ `medium_adv` และ `large_adv`
 
-เริ่มต้นโดยดาวน์โหลดและแตกไฟล์ [archive](../project1.zip?raw=true) ของโปรเจกต์ไปไว้ในไดเรกทอรีที่คุณเลือก ใช้คำสั่งด้านล่างเพื่อรัน Minimax ของคุณแข่งกับผี `dumby` ในเลย์เอาต์ขนาดเล็ก:
+เริ่มต้นจากโฟลเดอร์ `project1` ของ repository นี้ได้เลย โดยไม่ต้องดาวน์โหลดหรือแตกไฟล์ ZIP เพิ่ม ใช้คำสั่งด้านล่างเพื่อรัน Minimax ของคุณแข่งกับผี `dumby` ในเลย์เอาต์ขนาดเล็ก:
 ```console
 $ python run.py --agent minimax --ghost dumby --layout small_adv
 ```
@@ -46,7 +46,7 @@ In [Project 0](../project0), Pacman could wander peacefully in the maze. Now, he
 
 Your task is to design an intelligent agent based on adversarial search algorithms (see [Lecture 3](https://github.com/aofphy/SCI193611_ARTIFICIAL_INTELLIGENCE/blob/main/slide/lecture3_th.pdf)) for **maximizing** the score of Pacman. You are asked to implement the **Minimax** and **H-Minimax** algorithms where Pacman and the ghost are the two players. We recommend to implement the algorithms in this order. It is mandatory to use only the [API](..#api) to retrieve game information. Layouts with capsules will not be considered, but you may take them into account if you feel motivated. Your implementation of Minimax does not need to run on the `medium_adv` and `large_adv` layouts.
 
-To get started, download and extract the [archive](../project1.zip?raw=true) of the project in the directory of your choice. Use the following command to run your Minimax implementation against the `dumby` ghost in the small layout:
+To get started, open the `project1` directory of this repository; no separate archive is required. Use the following command to run your Minimax implementation against the `dumby` ghost in the small layout:
 ```console
 $ python run.py --agent minimax --ghost dumby --layout small_adv
 ```
