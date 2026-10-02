@@ -40,43 +40,82 @@ class BeliefStateAgent(Agent):
         # NB: Adding code here is not necessarily useful, but you may.
         # XXX: End of your code
 
-
     def _get_sensor_model(self, pacman_position, evidence):
-        """
-        Arguments:
-        ----------
-        - `pacman_position`: 2D coordinates position
-          of pacman at state x_{t}
-          where 't' is the current time step
+        """Return observation likelihoods on the current maze.
 
-        Return:
-        -------
-        The sensor model represented as a 2D numpy array of
-        size [width, height].
-        The element at position (w, h) is the probability
-        P(E_t=evidence | X_t=(w, h))
+        Args:
+            pacman_position: Current Pacman coordinates (x, y).
+            evidence: Observed noisy Manhattan distance to one ghost.
+
+        Returns:
+            A float array of shape (width, height) containing
+            P(E=evidence | X=(x, y), Pacman=pacman_position).
+            Walls and observations outside the binomial support have
+            likelihood zero. These likelihoods are not a spatial prior
+            and are not normalized over positions.
+
+        Requires:
+            self.walls is initialized; self.n and self.p describe the
+            same binomial noise as the evidence generator.
         """
-        pass
+        walls = np.asarray(self.walls.data, dtype=bool)
+        x, y = np.indices(walls.shape)
+        distances = (np.abs(x - pacman_position[0])
+                     + np.abs(y - pacman_position[1]))
+        successes = evidence - distances + self.n * self.p
+        likelihood = binom.pmf(successes, self.n, self.p)
+        likelihood[walls] = 0.0
+        return likelihood
 
     def _get_transition_model(self, pacman_position):
-        """
-        Arguments:
-        ----------
-        - `pacman_position`: 2D coordinates position
-          of pacman at state x_{t}
-          where 't' is the current time step
+        """Return ghost movement probabilities conditional on Pacman.
 
-        Return:
-        -------
-        The transition model represented as a 4D numpy array of
-        size [width, height, width, height].
-        The element at position (w1, h1, w2, h2) is the probability
-        P(X_t+1=(w1, h1) | X_t=(w2, h2))
+        Args:
+            pacman_position: Pacman coordinates (x, y), held fixed
+                during the ghost move.
+
+        Returns:
+            A float array T of shape (width, height, width, height).
+            T[nx, ny, x, y] is P(X_next=(nx, ny) | X=(x, y)).
+            Each non-wall source column sums to one; wall sources and
+            destinations have zero probability. Isolated cells retain
+            their mass, matching the ghost's fallback STOP action.
+
+        Requires:
+            self.walls is initialized and self.ghost_type is one of
+            'confused', 'afraid', or 'scared'.
         """
-        pass
+        escape_weight = {'confused': 1.0, 'afraid': 2.0,
+                         'scared': 8.0}[self.ghost_type]
+        walls = np.asarray(self.walls.data, dtype=bool)
+        width, height = walls.shape
+        transition = np.zeros((width, height, width, height))
+        offsets = ((1, 0), (-1, 0), (0, 1), (0, -1))
+
+        for x, y in zip(*np.nonzero(~walls)):
+            neighbors = [(x + dx, y + dy) for dx, dy in offsets
+                         if 0 <= x + dx < width
+                         and 0 <= y + dy < height
+                         and not walls[x + dx, y + dy]]
+            if not neighbors:
+                transition[x, y, x, y] = 1.0
+                continue
+
+            distance = util.manhattanDistance((x, y), pacman_position)
+            weights = np.array([
+                escape_weight
+                if util.manhattanDistance(pos, pacman_position) >= distance
+                else 1.0
+                for pos in neighbors
+            ])
+            probabilities = weights / weights.sum()
+            for (nx, ny), probability in zip(neighbors, probabilities):
+                transition[nx, ny, x, y] = probability
+
+        return transition
 
     def _get_updated_belief(self, belief, evidences, pacman_position,
-            ghosts_eaten):
+                            ghosts_eaten):
         """
         Given a list of (noised) distances from pacman to ghosts,
         and the previous belief states before receiving the evidences,
