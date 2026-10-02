@@ -148,7 +148,40 @@ class BeliefStateAgent(Agent):
         """
 
         # XXX: Your code here
+        # _get_updated_belief
+        transition = self._get_transition_model(pacman_position)
+        walls = np.asarray(self.walls.data, dtype=bool)
+        free = ~walls
+        updated = []
 
+        for ghost_belief, evidence, eaten in zip(belief, evidences,
+                                                 ghosts_eaten):
+            if eaten:
+                updated.append(np.zeros(walls.shape))
+                continue
+
+            # Prediction: P(X_t | e_{1:t-1}) = sum_x T(. | x) b_{t-1}(x)
+            prior = np.tensordot(transition, np.asarray(ghost_belief),
+                                 axes=([2, 3], [0, 1]))
+
+            # Correction: P(X_t | e_{1:t}) is proportional to
+            # P(e_t | X_t) * P(X_t | e_{1:t-1})
+            posterior = prior * self._get_sensor_model(pacman_position,
+                                                       evidence)
+
+            # Normalization, with fallbacks if the evidence is impossible
+            # under the current prediction (e.g. numerical underflow).
+            total = posterior.sum()
+            if total > 0:
+                posterior = posterior / total
+            elif prior.sum() > 0:
+                posterior = prior / prior.sum()
+            else:
+                posterior = free / free.sum()
+
+            updated.append(posterior)
+
+        belief = updated
         # XXX: End of your code
 
         return belief
