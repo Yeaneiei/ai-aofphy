@@ -6,6 +6,7 @@ Each trial writes one CSV: <out>/<layout>_<ghost>_v<variance>_s<seed>.csv
 with columns t,ghost,entropy,exp_dist (see `_record_metrics`).
 """
 import argparse
+import json
 import os
 import random
 import sys
@@ -80,10 +81,13 @@ class WanderingPacman(Agent):
 
 
 def run_trial(layout, ghost, variance, seed, steps, nghosts, out):
+    """Run one seeded trial and write metrics plus completion metadata."""
+    os.makedirs(out, exist_ok=True)
     random.seed(seed)
     np.random.seed(seed)
-    path = os.path.join(out, "%s_%s_v%g_s%d.csv"
-                        % (layout, ghost, variance, seed))
+    count_tag = '' if nghosts == 1 else '_n%d' % nghosts
+    path = os.path.join(out, "%s_%s_v%g%s_s%d.csv"
+                        % (layout, ghost, variance, count_tag, seed))
     if os.path.exists(path):
         os.remove(path)
     os.environ["METRICS_LOG"] = path
@@ -91,14 +95,23 @@ def run_trial(layout, ghost, variance, seed, steps, nghosts, out):
                            layout=layout, nghosts=nghosts)
     bsagt = BeliefStateAgent(args, steps)
     gagts = [GHOSTS[ghost](i + 1, args) for i in range(nghosts)]
+    output_streams = sys.stdout, sys.stderr
+    reason = 'game_finished'
     try:
         runGame(layout, WanderingPacman(args), gagts, bsagt, False,
                 expout=0, hiddenGhosts=True, edibleGhosts=True,
                 startingIndex=nghosts + 1)
     except StopTrial:
-        pass
+        reason = 'step_limit'
     finally:
-        sys.stdout, sys.stderr = sys.__stdout__, sys.__stderr__
+        sys.stdout, sys.stderr = output_streams
+    metadata = dict(layout=layout, ghost=ghost, variance=variance,
+                    actual_variance=bsagt.n / 4, seed=seed,
+                    nghosts=nghosts, requested_steps=steps,
+                    recorded_steps=bsagt._t, end_reason=reason,
+                    complete=bsagt._t == steps)
+    with open(path.replace('.csv', '.json'), 'w') as stream:
+        json.dump(metadata, stream, indent=2)
     return path
 
 
@@ -114,6 +127,11 @@ if __name__ == '__main__':
     ap.add_argument('--seed0', type=int, default=0)
     ap.add_argument('--out', default='out')
     a = ap.parse_args()
+    if a.trials <= 0 or a.steps <= 0 or a.nghosts <= 0:
+        ap.error('trials, steps and nghosts must be positive')
+    if a.seed0 < 0 or any(not np.isfinite(v) or v < 0
+                          for v in a.variances):
+        ap.error('seed0 and finite variances must be nonnegative')
     os.makedirs(a.out, exist_ok=True)
     for lay in a.layouts:
         for g in a.ghosts:

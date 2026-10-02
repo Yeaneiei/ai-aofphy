@@ -18,7 +18,8 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from scipy import stats  # noqa: E402
 
-PAT = re.compile(r"(.+)_(confused|afraid|scared)_v([\d.]+)_s(\d+)\.csv")
+PAT = re.compile(
+    r"(.+)_(confused|afraid|scared)_v([\d.]+)(?:_n(\d+))?_s(\d+)\.csv")
 GHOSTS = ["confused", "afraid", "scared"]
 COLORS = {"confused": "tab:blue", "afraid": "tab:orange",
           "scared": "tab:red"}
@@ -34,16 +35,23 @@ def load(folder):
             continue
         d = pd.read_csv(f, names=["t", "ghost", "entropy", "exp_dist"])
         d["layout"], d["ghost_type"] = m[1], m[2]
-        d["var"], d["seed"] = float(m[3]), int(m[4])
+        d["var"], d["seed"] = float(m[3]), int(m[5])
+        d["nghosts"] = int(m[4] or 1)
         frames.append(d)
-    return pd.concat(frames, ignore_index=True)
+    if not frames:
+        raise ValueError('No matching trial CSV files in ' + folder)
+    result = pd.concat(frames, ignore_index=True)
+    if result.nghosts.nunique() > 1:
+        raise ValueError('Analyze each ghost count in a separate folder')
+    return result
 
 
 def ci95(x):
     x = np.asarray(x, dtype=float)
+    x = x[np.isfinite(x)]
     n = len(x)
     if n < 2:
-        return 0.0
+        return float('nan')
     return stats.t.ppf(0.975, n - 1) * x.std(ddof=1) / np.sqrt(n)
 
 
@@ -81,9 +89,9 @@ def curves(P, layouts, var, figs):
 
 def steady(P, burnin):
     """One steady-state value per trial = mean over t >= burnin."""
-    S = P[P.t >= burnin].groupby(
-        ["layout", "ghost_type", "var", "seed"])[["entropy", "exp_dist"]
-                                                  ].mean().reset_index()
+    keys = ["layout", "ghost_type", "var", "seed"]
+    metrics = ["entropy", "exp_dist"]
+    S = P[P.t >= burnin].groupby(keys)[metrics].mean().reset_index()
     return S
 
 
@@ -160,6 +168,8 @@ if __name__ == "__main__":
     D = load(a.data)
     P = per_trial(D)
     S = steady(P, a.burnin)
+    if S.empty:
+        raise ValueError('No samples remain after burn-in')
     layouts = sorted(P.layout.unique())
     curves(P, layouts, a.basevar, a.figs)
     bars(S, layouts, a.basevar, a.figs)

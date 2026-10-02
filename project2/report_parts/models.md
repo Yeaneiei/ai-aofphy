@@ -123,6 +123,8 @@ course project, adapted from [UC Berkeley CS188](http://ai.berkeley.edu/).
 - Tests require NumPy and SciPy; style checking additionally requires
   pycodestyle. Run these commands from the repository root in an environment
   containing those dependencies.
-- Full-game filtering is not complete: the belief update, metrics, and
-  controller remain assigned to persons 2 and 3. No experiment results
-  are claimed here.
+- Full-game filtering, metrics and the bonus controller are implemented.
+  Baseline experiments comprise 180 complete 200-step trials. Two
+  confused/walls conditions were extended to 1,000 steps (20 trials).
+  Residual late-window entropy drift remains; convergence is not claimed.
+  See report.tex, report.pdf, REVIEW.md and convergence_results.json.

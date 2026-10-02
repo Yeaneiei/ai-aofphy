@@ -90,6 +90,40 @@ class ModelChecks(unittest.TestCase):
         self.assertEqual(transition[1, 1, 1, 1], 1)
         self.assertEqual(transition.sum(), 1)
 
+    def test_filter_multiple_and_eaten_ghosts(self):
+        """Compare a three-cell posterior with hand-calculated weights."""
+        agent = self.agent('afraid')
+        agent.walls = Grid(5, 3, True)
+        for x in (1, 2, 3):
+            agent.walls[x][1] = False
+        belief = np.zeros((5, 3))
+        belief[2, 1] = 1
+        result = agent._get_updated_belief(
+            [belief, belief, belief], [2, 2, 2], (0, 1),
+            [False, False, True])
+        expected = np.zeros_like(belief)
+        expected[1, 1], expected[3, 1] = 1 / 3, 2 / 3
+        np.testing.assert_allclose(result[0], expected)
+        np.testing.assert_allclose(result[1], expected)
+        self.assertEqual(result[2].sum(), 0)
+        changed = agent._get_updated_belief(
+            [belief], [2], (4, 1), [False])[0]
+        np.testing.assert_allclose(changed, expected[::-1])
+
+    def test_filter_impossible_evidence(self):
+        """An impossible observation retains the normalized prediction."""
+        agent = self.agent('confused', variance=0)
+        agent.walls = Grid(5, 3, True)
+        for x in (1, 2, 3):
+            agent.walls[x][1] = False
+        belief = np.zeros((5, 3))
+        belief[2, 1] = 1
+        result = agent._get_updated_belief(
+            [belief], [100], (0, 1), [False])[0]
+        expected = np.zeros_like(belief)
+        expected[1, 1] = expected[3, 1] = .5
+        np.testing.assert_allclose(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

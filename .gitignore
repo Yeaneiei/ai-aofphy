@@ -1,0 +1,22 @@
+# Local Python environments and caches
+.venv/
+.venv-*/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Temporary Project 2 checks and rendered PDF previews
+/project2/smoke_out/
+/project2/review_figs/mplconfig/
+/project2/review_figs/report_page_*.png
+/project2/review_figs/equation*.png
+
+# LaTeX build intermediates; keep report.pdf and .tex sources
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
