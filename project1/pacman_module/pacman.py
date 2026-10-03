@@ -831,7 +831,7 @@ def loadAgent(pacman, nographics):
 
 def replayGame(layout, actions, display):
     import pacmanAgents
-    import project1.pacman_module.ghostAgents as ghostAgents
+    from . import ghostAgents
     rules = ClassicGameRules()
     agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.RandomGhost(i + 1)
                                              for i in range(layout.getNumGhosts())]

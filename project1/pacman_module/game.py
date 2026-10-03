@@ -25,7 +25,8 @@ import time
 import os
 import traceback
 import sys
-import project1.pacman_module as pacmodule
+from importlib import import_module
+pacmodule = import_module(__package__)
 import numpy as np
 from copy import deepcopy
 

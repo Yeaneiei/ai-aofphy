@@ -1,5 +1,13 @@
 # โปรเจกต์การเขียนโปรแกรม Pacman
 
+ผลตรวจและการแก้ไขล่าสุด (3 ตุลาคม 2026) อยู่ใน [PROJECT_REVIEW.md](PROJECT_REVIEW.md)
+อาจารย์ไม่ต้องการ PDF แล้วตามที่ผู้ใช้แจ้ง; ข้อกำหนดส่งงานปัจจุบันของ
+โปรเจกต์ 2 อยู่ใน [project2/README.md](project2/README.md)
+Dependencies รวมอยู่ใน `requirements.txt`; วิธีทดสอบคือ
+`python check_projects.py` และ
+`python -m unittest project1.test_agents project2.check_models test_submission_imports -v`
+ชุดทดสอบ project0 ให้รัน `python -m unittest test_search -v` จากโฟลเดอร์ project0
+
 <p align="center"><img src="pacman_game.png" width="50%"></p>
 
 เป้าหมายของโปรเจกต์การเขียนโปรแกรมนี้คือการสร้างตัวแทนอัจฉริยะ (Intelligent Agents) สำหรับเกม Pacman โดยโปรเจกต์จะแบ่งออกเป็นสามส่วน:

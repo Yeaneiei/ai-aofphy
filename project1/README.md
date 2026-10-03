@@ -1,5 +1,18 @@
 # โปรเจกต์ 1
 
+## สถานะหลังแก้ไข (3 ตุลาคม 2026)
+
+Minimax คำนวณค่าตามสมการ MAX/MIN บนกราฟสถานะโดยไม่มี depth cutoff
+และจัดการวงจรอย่างชัดเจน: เกมที่เดินไม่จบมีคะแนน -infinity เนื่องจาก
+เสียหนึ่งคะแนนทุกตาของ Pacman ค่าของ terminal ถูกส่งย้อนกลับจนค่าคงที่
+ส่วน H-Minimax ยังคงจำกัดความลึกและใช้ alpha-beta ทั้งสองแบบรองรับกรณีไม่มีผี
+
+รันจากโฟลเดอร์นี้ได้โดยไม่ต้องตั้ง PYTHONPATH หรือจาก root ด้วย
+`python -m project1.run --agent minimax --ghost dumby --nographics`
+ทดสอบความถูกต้องจาก root ด้วย `python -m unittest project1.test_agents -v`
+และตรวจการคัดลอกไปรันแยกด้วย `python -m unittest test_submission_imports -v`
+ผลรันล่าสุดอยู่ใน `../project_check_results.json` และ CSV ของโปรเจกต์นี้
+
 ## สิ่งที่ต้องส่งมอบ
 
 โปรดส่ง

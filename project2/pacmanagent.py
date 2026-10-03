@@ -1,7 +1,11 @@
 # Complete this class for all parts of the project
 
-from project2.pacman_module.game import Agent, Actions
-from project2.pacman_module.pacman import Directions
+if __package__:
+    from .pacman_module.game import Agent, Actions
+    from .pacman_module.pacman import Directions
+else:
+    from pacman_module.game import Agent, Actions
+    from pacman_module.pacman import Directions
 import numpy as np
 
 

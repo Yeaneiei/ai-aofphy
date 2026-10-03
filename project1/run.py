@@ -3,13 +3,14 @@ import importlib
 import numpy as np
 import random
 
-from project1.pacman_module.pacman import runGame
-from project1.pacman_module.ghostAgents import (
-    DumbyGhost,
-    GreedyGhost,
-    SmartyGhost,
-    EastRandyGhost,
-)
+if __package__:
+    from .pacman_module.pacman import runGame
+    from .pacman_module.ghostAgents import (
+        DumbyGhost, GreedyGhost, SmartyGhost, EastRandyGhost)
+else:
+    from pacman_module.pacman import runGame
+    from pacman_module.ghostAgents import (
+        DumbyGhost, GreedyGhost, SmartyGhost, EastRandyGhost)
 
 
 GHOSTS = {
@@ -69,7 +70,10 @@ if __name__ == '__main__':
 
     score, time, nodes = runGame(
         layout_name=args.layout,
-        pacman=importlib.import_module(args.agent).PacmanAgent(),
+        pacman=importlib.import_module(
+            '.' + args.agent, __package__).PacmanAgent()
+        if __package__ and '.' not in args.agent
+        else importlib.import_module(args.agent).PacmanAgent(),
         ghosts=[GHOSTS[args.ghost](1)],
         beliefstateagent=None,
         displayGraphics=not args.nographics,

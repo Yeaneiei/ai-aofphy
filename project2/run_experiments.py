@@ -1,7 +1,7 @@
 """Run repeated fixed-length Bayes-filter trials and log the metrics.
 
 Run from inside `project2/` (layouts are found relative to the cwd):
-    PYTHONPATH=.. python run_experiments.py --trials 30 --steps 200
+    python run_experiments.py --trials 30 --steps 200
 Each trial writes one CSV: <out>/<layout>_<ghost>_v<variance>_s<seed>.csv
 with columns t,ghost,entropy,exp_dist (see `_record_metrics`).
 """
@@ -20,11 +20,18 @@ except ImportError:
     from unittest import mock
     sys.modules['tkinter'] = mock.MagicMock()
 
-from project2.bayesfilter import BeliefStateAgent as _Filter
-from project2.pacman_module.game import Agent, Directions, Actions
-from project2.pacman_module.ghostAgents import (
-    AfraidGhost, ConfusedGhost, ScaredGhost)
-from project2.pacman_module.pacman import runGame
+if __package__:
+    from .bayesfilter import BeliefStateAgent as _Filter
+    from .pacman_module.game import Agent, Directions, Actions
+    from .pacman_module.ghostAgents import (
+        AfraidGhost, ConfusedGhost, ScaredGhost)
+    from .pacman_module.pacman import runGame
+else:
+    from bayesfilter import BeliefStateAgent as _Filter
+    from pacman_module.game import Agent, Directions, Actions
+    from pacman_module.ghostAgents import (
+        AfraidGhost, ConfusedGhost, ScaredGhost)
+    from pacman_module.pacman import runGame
 
 GHOSTS = {'confused': ConfusedGhost, 'afraid': AfraidGhost,
           'scared': ScaredGhost}

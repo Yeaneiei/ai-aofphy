@@ -28,8 +28,16 @@ class PacmanAgent(Agent):
         return self.moves.popleft() if self.moves else Directions.STOP
 
     def bfs(self, state):
-        """Return a shortest winning path, or an empty list on failure."""
-        start = key(state)
+        """Return a shortest winning path, or an empty list on failure.
+
+        Food is tracked as an integer mask, updated at the destination
+        of each move. In these ghost-free mazes capsules change score
+        but do not change reachability or the number-of-moves objective,
+        so capsule-only differences need not be expanded again.
+        """
+        food_bits = {position: 1 << index for index, position in
+                     enumerate(state.getFood().asList())}
+        start = (state.getPacmanPosition(), (1 << len(food_bits)) - 1)
         parents = {start: None}
         frontier = deque([(state, start)])
         while frontier:
@@ -43,7 +51,9 @@ class PacmanAgent(Agent):
             if current.isLose():
                 continue
             for successor, action in current.generatePacmanSuccessors():
-                successor_key = key(successor)
+                position = successor.getPacmanPosition()
+                food = current_key[1] & ~food_bits.get(position, 0)
+                successor_key = (position, food)
                 if successor_key not in parents:
                     parents[successor_key] = (current_key, action)
                     frontier.append((successor, successor_key))

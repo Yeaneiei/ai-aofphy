@@ -1,7 +1,11 @@
 from collections import deque
 
-from project1.pacman_module.game import Agent, Directions
-from project1.pacman_module.util import manhattanDistance
+if __package__:
+    from .pacman_module.game import Agent, Directions
+    from .pacman_module.util import manhattanDistance
+else:
+    from pacman_module.game import Agent, Directions
+    from pacman_module.util import manhattanDistance
 
 
 class PacmanAgent(Agent):
@@ -23,6 +27,8 @@ class PacmanAgent(Agent):
                 the heuristic evaluation function is used.
         """
         super().__init__()
+        if not isinstance(depth, int) or depth < 1:
+            raise ValueError('depth must be a positive integer')
         self.depth = depth
         self.walls = None
 
@@ -35,6 +41,8 @@ class PacmanAgent(Agent):
         Returns:
             A legal move as defined in `game.Directions`.
         """
+        if state.isWin() or state.isLose():
+            return Directions.STOP
         successors = state.generatePacmanSuccessors()
         if not successors:
             return Directions.STOP
@@ -47,7 +55,7 @@ class PacmanAgent(Agent):
         best_value = float("-inf")
 
         for successor, action in successors:
-            value = self._min_value(successor, 1, self.depth, alpha, beta)
+            value = self._after_pacman(successor, self.depth, alpha, beta)
             if value > best_value:
                 best_value = value
                 best_action = action
@@ -69,12 +77,18 @@ class PacmanAgent(Agent):
         value = float("-inf")
         for successor, _ in successors:
             value = max(
-                value, self._min_value(successor, 1, depth, alpha, beta)
+                value, self._after_pacman(successor, depth, alpha, beta)
             )
             if value > beta:
                 return value
             alpha = max(alpha, value)
         return value
+
+    def _after_pacman(self, state, depth, alpha, beta):
+        """Advance to a ghost, or finish a round when there are none."""
+        if state.getNumAgents() == 1:
+            return self._max_value(state, depth - 1, alpha, beta)
+        return self._min_value(state, 1, depth, alpha, beta)
 
     def _min_value(self, state, agent_index, depth, alpha, beta):
         """Value of a state for the ghost `agent_index` (MIN player)."""

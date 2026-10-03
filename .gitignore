@@ -6,13 +6,18 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 
-# Temporary Project 2 checks and rendered PDF previews
+# Generated run summaries and local review outputs
+/project0/temp
+/project2/temp
+/project2/metrics.csv
 /project2/smoke_out/
 /project2/review_figs/mplconfig/
 /project2/review_figs/report_page_*.png
 /project2/review_figs/equation*.png
 
-# LaTeX build intermediates; keep report.pdf and .tex sources
+# Optional historical LaTeX sources; PDF submission is no longer required
+/project2/report.pdf
+/project2/submission-draft.tar.gz
 *.aux
 *.log
 *.out

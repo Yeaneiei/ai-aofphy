@@ -1,4 +1,7 @@
-from project1.pacman_module.game import Agent, Directions
+if __package__:
+    from .pacman_module.game import Agent, Directions
+else:
+    from pacman_module.game import Agent, Directions
 
 
 class PacmanAgent(Agent):

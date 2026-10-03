@@ -1,0 +1,409 @@
+[
+  {
+    "project": "project0",
+    "args": [
+      "run.py",
+      "--agentfile",
+      "bfs.py",
+      "--layout",
+      "small",
+      "--silentdisplay",
+      "--nghosts",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 497\nTotal score : 497.0\nTotal computation time (seconds) : 0.0019919872283935547\nTotal expanded nodes : 15\n"
+  },
+  {
+    "project": "project0",
+    "args": [
+      "run.py",
+      "--agentfile",
+      "bfs.py",
+      "--layout",
+      "medium",
+      "--silentdisplay",
+      "--nghosts",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 565\nTotal score : 565.0\nTotal computation time (seconds) : 2.156214475631714\nTotal expanded nodes : 16688\n"
+  },
+  {
+    "project": "project0",
+    "args": [
+      "run.py",
+      "--agentfile",
+      "bfs.py",
+      "--layout",
+      "large",
+      "--silentdisplay",
+      "--nghosts",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 429\nTotal score : 429.0\nTotal computation time (seconds) : 0.6526124477386475\nTotal expanded nodes : 1966\n"
+  },
+  {
+    "project": "project0",
+    "args": [
+      "run.py",
+      "--agentfile",
+      "astar.py",
+      "--layout",
+      "small",
+      "--silentdisplay",
+      "--nghosts",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 500\nTotal score : 500.0\nTotal computation time (seconds) : 0.0010211467742919922\nTotal expanded nodes : 11\n"
+  },
+  {
+    "project": "project0",
+    "args": [
+      "run.py",
+      "--agentfile",
+      "astar.py",
+      "--layout",
+      "medium",
+      "--silentdisplay",
+      "--nghosts",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 568\nTotal score : 568.0\nTotal computation time (seconds) : 0.07372379302978516\nTotal expanded nodes : 282\n"
+  },
+  {
+    "project": "project0",
+    "args": [
+      "run.py",
+      "--agentfile",
+      "astar.py",
+      "--layout",
+      "large",
+      "--silentdisplay",
+      "--nghosts",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 433\nTotal score : 433.0\nTotal computation time (seconds) : 0.1578516960144043\nTotal expanded nodes : 223\n"
+  },
+  {
+    "project": "project0",
+    "args": [
+      "run.py",
+      "--agentfile",
+      "dfs.py",
+      "--layout",
+      "small",
+      "--silentdisplay",
+      "--nghosts",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 487\nTotal score : 487.0\nTotal computation time (seconds) : 0.0018739700317382812\nTotal expanded nodes : 18\n"
+  },
+  {
+    "project": "project0",
+    "args": [
+      "run.py",
+      "--agentfile",
+      "dfs.py",
+      "--layout",
+      "medium",
+      "--silentdisplay",
+      "--nghosts",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 405\nTotal score : 405.0\nTotal computation time (seconds) : 0.06906533241271973\nTotal expanded nodes : 362\n"
+  },
+  {
+    "project": "project0",
+    "args": [
+      "run.py",
+      "--agentfile",
+      "dfs.py",
+      "--layout",
+      "large",
+      "--silentdisplay",
+      "--nghosts",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 314\nTotal score : 314.0\nTotal computation time (seconds) : 0.3070697784423828\nTotal expanded nodes : 371\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "minimax",
+      "--layout",
+      "small_adv",
+      "--ghost",
+      "dumby",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 516\nScore: 516.0\nComputation time: 0.029001951217651367\nExpanded nodes: 263\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "minimax",
+      "--layout",
+      "small_adv",
+      "--ghost",
+      "greedy",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 516\nScore: 516.0\nComputation time: 0.02408003807067871\nExpanded nodes: 263\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "minimax",
+      "--layout",
+      "small_adv",
+      "--ghost",
+      "smarty",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 516\nScore: 516.0\nComputation time: 0.022862672805786133\nExpanded nodes: 263\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "minimax",
+      "--layout",
+      "small_adv",
+      "--ghost",
+      "eastrandy",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 516\nScore: 516.0\nComputation time: 0.025120258331298828\nExpanded nodes: 263\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "small_adv",
+      "--ghost",
+      "dumby",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 507\nScore: 507.0\nComputation time: 0.018884897232055664\nExpanded nodes: 198\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "small_adv",
+      "--ghost",
+      "greedy",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 507\nScore: 507.0\nComputation time: 0.018284320831298828\nExpanded nodes: 198\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "small_adv",
+      "--ghost",
+      "smarty",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 507\nScore: 507.0\nComputation time: 0.021108388900756836\nExpanded nodes: 198\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "small_adv",
+      "--ghost",
+      "eastrandy",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 507\nScore: 507.0\nComputation time: 0.032033443450927734\nExpanded nodes: 198\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "medium_adv",
+      "--ghost",
+      "dumby",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 539\nScore: 539.0\nComputation time: 0.5119361877441406\nExpanded nodes: 1864\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "medium_adv",
+      "--ghost",
+      "greedy",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 539\nScore: 539.0\nComputation time: 0.43793773651123047\nExpanded nodes: 1368\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "medium_adv",
+      "--ghost",
+      "smarty",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 539\nScore: 539.0\nComputation time: 0.3129916191101074\nExpanded nodes: 1321\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "medium_adv",
+      "--ghost",
+      "eastrandy",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 532\nScore: 532.0\nComputation time: 0.48221349716186523\nExpanded nodes: 2073\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "large_adv",
+      "--ghost",
+      "dumby",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 536\nScore: 536.0\nComputation time: 3.1991465091705322\nExpanded nodes: 5917\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "large_adv",
+      "--ghost",
+      "greedy",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 529\nScore: 529.0\nComputation time: 1.0343105792999268\nExpanded nodes: 2849\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "large_adv",
+      "--ghost",
+      "smarty",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 529\nScore: 529.0\nComputation time: 1.0770907402038574\nExpanded nodes: 2849\n"
+  },
+  {
+    "project": "project1",
+    "args": [
+      "run.py",
+      "--agent",
+      "hminimax",
+      "--layout",
+      "large_adv",
+      "--ghost",
+      "eastrandy",
+      "--nographics",
+      "--seed",
+      "0"
+    ],
+    "exit_code": 0,
+    "output": "Pacman emerges victorious! Score: 536\nScore: 536.0\nComputation time: 1.8485989570617676\nExpanded nodes: 5303\n"
+  }
+]

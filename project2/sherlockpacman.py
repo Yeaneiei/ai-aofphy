@@ -1,6 +1,10 @@
 
-from project2.pacman_module.game import Agent
-from project2.pacman_module.pacman import Directions
+if __package__:
+    from .pacman_module.game import Agent
+    from .pacman_module.pacman import Directions
+else:
+    from pacman_module.game import Agent
+    from pacman_module.pacman import Directions
 import random
 
 class PacmanAgent(Agent):

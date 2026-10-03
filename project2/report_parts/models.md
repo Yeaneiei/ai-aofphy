@@ -127,4 +127,5 @@ course project, adapted from [UC Berkeley CS188](http://ai.berkeley.edu/).
   Baseline experiments comprise 180 complete 200-step trials. Two
   confused/walls conditions were extended to 1,000 steps (20 trials).
   Residual late-window entropy drift remains; convergence is not claimed.
-  See report.tex, report.pdf, REVIEW.md and convergence_results.json.
+  See report.tex (historical notes), REVIEW.md and convergence_results.json.
+  The instructor no longer requires a PDF report (October 3, 2026).

@@ -1,9 +1,13 @@
 # Complete this class for all parts of the project
 
-from project2.pacman_module.game import Agent
+if __package__:
+    from .pacman_module.game import Agent
+    from .pacman_module import util
+else:
+    from pacman_module.game import Agent
+    from pacman_module import util
 import numpy as np
 import os
-from project2.pacman_module import util
 from scipy.stats import binom
 
 
@@ -40,7 +44,9 @@ class BeliefStateAgent(Agent):
         # XXX: Your code here
         # NB: Adding code here is not necessarily useful, but you may.
         self._t = 0
-        self._metrics_path = os.environ.get("METRICS_LOG", "metrics.csv")
+        default_metrics = os.path.join(os.path.dirname(__file__),
+                                       "metrics.csv")
+        self._metrics_path = os.environ.get("METRICS_LOG", default_metrics)
         # XXX: End of your code
 
     def _get_sensor_model(self, pacman_position, evidence):

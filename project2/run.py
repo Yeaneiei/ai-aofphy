@@ -2,9 +2,14 @@ import importlib
 import os
 from argparse import ArgumentParser, ArgumentTypeError
 import random
-from project2.pacman_module.pacman import runGame
-from project2.pacman_module.ghostAgents import\
-    ConfusedGhost, AfraidGhost, ScaredGhost
+if __package__:
+    from .pacman_module.pacman import runGame
+    from .pacman_module.ghostAgents import (
+        ConfusedGhost, AfraidGhost, ScaredGhost)
+else:
+    from pacman_module.pacman import runGame
+    from pacman_module.ghostAgents import (
+        ConfusedGhost, AfraidGhost, ScaredGhost)
 import numpy as np
 
 
@@ -34,7 +39,8 @@ def load_agent_from_file(filepath, class_module):
     expected_class = class_module
     mod_name, file_ext = os.path.splitext(os.path.split(filepath)[-1])
 
-    py_mod = importlib.import_module(mod_name)
+    py_mod = (importlib.import_module('.' + mod_name, __package__)
+              if __package__ else importlib.import_module(mod_name))
 
     if hasattr(py_mod, expected_class):
         class_mod = getattr(py_mod, expected_class)
@@ -142,7 +148,7 @@ if __name__ == '__main__':
 
     print("Total score : " + str(total_score))
     print("Total computation time (seconds) : " + str(total_computation_time))
-    f = open("temp", "w+")
+    f = open(os.path.join(os.path.dirname(__file__), "temp"), "w+")
     s, c = total_score, total_computation_time
     f.write(str(s) + ";" + str(c))
     f.close()

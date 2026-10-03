@@ -167,6 +167,10 @@ def getLayout(name, back=2):
         layout = tryToLoad('pacman_module/layouts/' + name + '.lay')
         if layout is None:
             layout = tryToLoad(name + '.lay')
+    if layout is None:
+        filename = name if name.endswith('.lay') else name + '.lay'
+        layout = tryToLoad(os.path.join(os.path.dirname(__file__),
+                                       'layouts', filename))
     if layout is None and back >= 0:
         curdir = os.path.abspath('.')
         os.chdir('..')
