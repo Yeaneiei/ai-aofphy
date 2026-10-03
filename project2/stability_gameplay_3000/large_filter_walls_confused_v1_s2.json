@@ -1,0 +1,14 @@
+{
+  "layout": "large_filter_walls",
+  "ghost": "confused",
+  "variance": 1.0,
+  "actual_variance": 1.0,
+  "seed": 2,
+  "nghosts": 1,
+  "requested_steps": 3000,
+  "recorded_steps": 3000,
+  "end_reason": "step_limit",
+  "complete": true,
+  "protocol": "gameplay_truth_avoiding_walker",
+  "prediction_backend": "cached_dense_api_sparse_prediction"
+}

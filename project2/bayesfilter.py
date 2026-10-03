@@ -47,6 +47,13 @@ class BeliefStateAgent(Agent):
         default_metrics = os.path.join(os.path.dirname(__file__),
                                        "metrics.csv")
         self._metrics_path = os.environ.get("METRICS_LOG", default_metrics)
+        self._transition_walls = None
+        self._transition_cache = {}
+        self._maze_edges = None
+        self._last_transition = None
+        self._last_entries = None
+        self._sensor_parameters = None
+        self._sensor_probabilities = None
         # XXX: End of your code
 
     def _get_sensor_model(self, pacman_position, evidence):
@@ -72,7 +79,21 @@ class BeliefStateAgent(Agent):
         distances = (np.abs(x - pacman_position[0])
                      + np.abs(y - pacman_position[1]))
         successes = evidence - distances + self.n * self.p
-        likelihood = binom.pmf(successes, self.n, self.p)
+        if self.n <= 4096:
+            # Cache the exact Binomial PMF; observations index its support.
+            parameters = (self.n, self.p)
+            if parameters != self._sensor_parameters:
+                self._sensor_probabilities = binom.pmf(
+                    np.arange(self.n + 1), self.n, self.p)
+                self._sensor_parameters = parameters
+            valid = ((successes >= 0) & (successes <= self.n)
+                     & (successes == np.floor(successes)))
+            likelihood = np.zeros(walls.shape)
+            likelihood[valid] = self._sensor_probabilities[
+                successes[valid].astype(int)]
+        else:
+            # Avoid allocating an enormous table for unusual noise levels.
+            likelihood = binom.pmf(successes, self.n, self.p)
         likelihood[walls] = 0.0
         return likelihood
 
@@ -94,34 +115,57 @@ class BeliefStateAgent(Agent):
             self.walls is initialized and self.ghost_type is one of
             'confused', 'afraid', or 'scared'.
         """
-        escape_weight = {'confused': 1.0, 'afraid': 2.0,
-                         'scared': 8.0}[self.ghost_type]
         walls = np.asarray(self.walls.data, dtype=bool)
         width, height = walls.shape
-        transition = np.zeros((width, height, width, height))
-        offsets = ((1, 0), (-1, 0), (0, 1), (0, -1))
-
-        for x, y in zip(*np.nonzero(~walls)):
-            neighbors = [(x + dx, y + dy) for dx, dy in offsets
-                         if 0 <= x + dx < width
-                         and 0 <= y + dy < height
-                         and not walls[x + dx, y + dy]]
-            if not neighbors:
-                transition[x, y, x, y] = 1.0
-                continue
-
-            distance = util.manhattanDistance((x, y), pacman_position)
-            weights = np.array([
-                escape_weight
-                if util.manhattanDistance(pos, pacman_position) >= distance
-                else 1.0
-                for pos in neighbors
-            ])
-            probabilities = weights / weights.sum()
-            for (nx, ny), probability in zip(neighbors, probabilities):
-                transition[nx, ny, x, y] = probability
-
+        if (self._transition_walls is None
+                or not np.array_equal(walls, self._transition_walls)):
+            self._transition_cache.clear()
+            self._transition_walls = walls.copy()
+            self._maze_edges = self._legal_edges(walls)
+        cache_key = (self.ghost_type, tuple(pacman_position))
+        if cache_key not in self._transition_cache:
+            sources, destinations = self._maze_edges
+            x, y = np.indices(walls.shape)
+            distance = (np.abs(x - pacman_position[0])
+                        + np.abs(y - pacman_position[1])).ravel()
+            escape_weight = {'confused': 1.0, 'afraid': 2.0,
+                             'scared': 8.0}[self.ghost_type]
+            weights = np.where(distance[destinations] >= distance[sources],
+                               escape_weight, 1.0)
+            totals = np.bincount(sources, weights=weights,
+                                 minlength=walls.size)
+            probabilities = weights / totals[sources]
+            matrix = np.zeros((walls.size, walls.size))
+            matrix[destinations, sources] = probabilities
+            transition = matrix.reshape(width, height, width, height)
+            # Bound memory: keep at most eight dense API model arrays.
+            if len(self._transition_cache) >= 8:
+                self._transition_cache.pop(next(iter(self._transition_cache)))
+            self._transition_cache[cache_key] = (
+                transition, (sources, destinations, probabilities))
+        transition, entries = self._transition_cache[cache_key]
+        self._last_transition, self._last_entries = transition, entries
         return transition
+
+    @staticmethod
+    def _legal_edges(walls):
+        """Return flat indices of legal moves, with STOP for isolated cells."""
+        width, height = walls.shape
+        x, y = np.nonzero(~walls)
+        source_parts, destination_parts = [], []
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nx, ny = x + dx, y + dy
+            indices = np.flatnonzero((nx >= 0) & (nx < width)
+                                     & (ny >= 0) & (ny < height))
+            indices = indices[~walls[nx[indices], ny[indices]]]
+            source_parts.append(x[indices] * height + y[indices])
+            destination_parts.append(nx[indices] * height + ny[indices])
+        sources = np.concatenate(source_parts)
+        destinations = np.concatenate(destination_parts)
+        counts = np.bincount(sources, minlength=walls.size)
+        isolated = np.flatnonzero(~walls.ravel() & (counts == 0))
+        return (np.concatenate((sources, isolated)),
+                np.concatenate((destinations, isolated)))
 
     def _get_updated_belief(self, belief, evidences, pacman_position,
                             ghosts_eaten):
@@ -162,6 +206,13 @@ class BeliefStateAgent(Agent):
         walls = np.asarray(self.walls.data, dtype=bool)
         free = ~walls
         updated = []
+        if transition is self._last_transition:
+            sources, destinations, probabilities = self._last_entries
+        else:
+            # Respect a replacement transition model supplied by a caller.
+            matrix = np.asarray(transition).reshape(walls.size, walls.size)
+            destinations, sources = np.nonzero(matrix)
+            probabilities = matrix[destinations, sources]
 
         for ghost_belief, evidence, eaten in zip(belief, evidences,
                                                  ghosts_eaten):
@@ -170,8 +221,10 @@ class BeliefStateAgent(Agent):
                 continue
 
             # Prediction: P(X_t | e_{1:t-1}) = sum_x T(. | x) b_{t-1}(x)
-            prior = np.tensordot(transition, np.asarray(ghost_belief),
-                                 axes=([2, 3], [0, 1]))
+            prior = np.bincount(
+                destinations,
+                weights=probabilities * np.asarray(ghost_belief).ravel()[
+                    sources], minlength=walls.size).reshape(walls.shape)
 
             # Correction: P(X_t | e_{1:t}) is proportional to
             # P(e_t | X_t) * P(X_t | e_{1:t-1})

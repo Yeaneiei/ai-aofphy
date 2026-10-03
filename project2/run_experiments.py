@@ -59,10 +59,11 @@ class BeliefStateAgent(_Filter):
 
 
 class WanderingPacman(Agent):
-    """Random walker that never steps next to a ghost.
+    """Random walker that prefers to avoid stepping next to a ghost.
 
     It reads the true ghost positions ONLY to keep the game alive (any
-    collision ends the game); the filter never sees this information.
+    collision can end the game); the filter never sees this information.
+    When no safe move exists this policy can still eat a ghost.
     """
 
     def __init__(self, args):
@@ -96,7 +97,7 @@ def run_trial(layout, ghost, variance, seed, steps, nghosts, out):
     path = os.path.join(out, "%s_%s_v%g%s_s%d.csv"
                         % (layout, ghost, variance, count_tag, seed))
     if os.path.exists(path):
-        os.remove(path)
+        raise FileExistsError('Use a new output folder or seed: ' + path)
     os.environ["METRICS_LOG"] = path
     args = SimpleNamespace(ghostagent=ghost, sensorvariance=variance,
                            layout=layout, nghosts=nghosts)
@@ -117,6 +118,8 @@ def run_trial(layout, ghost, variance, seed, steps, nghosts, out):
                     nghosts=nghosts, requested_steps=steps,
                     recorded_steps=bsagt._t, end_reason=reason,
                     complete=bsagt._t == steps)
+    metadata.update(protocol='gameplay_truth_avoiding_walker',
+                    prediction_backend='cached_dense_api_sparse_prediction')
     with open(path.replace('.csv', '.json'), 'w') as stream:
         json.dump(metadata, stream, indent=2)
     return path
@@ -146,4 +149,9 @@ if __name__ == '__main__':
                 for k in range(a.trials):
                     p = run_trial(lay, g, v, a.seed0 + k, a.steps,
                                   a.nghosts, a.out)
+                    with open(p.replace('.csv', '.json')) as stream:
+                        completed = json.load(stream)
+                    print('finished', os.path.basename(p),
+                          'steps', completed['recorded_steps'],
+                          'complete', completed['complete'], flush=True)
                 print("done", lay, g, "var", v, flush=True)

@@ -3,6 +3,12 @@
 
 ## Implementation status (October 3, 2026)
 
+The new stability work uses a prespecified practical-equivalence check,
+not a claim that a flat-looking graph proves convergence. See
+`CONVERGENCE_PLAN.md` and `STABILITY_RESULTS.md` for protocols, margins,
+completed trial counts and the latest conclusions. Normal gameplay data
+and continuous tracking experiments are kept in separate folders.
+
 The instructor no longer requires a PDF report, as confirmed by the user.
 The PDF, PDF builder and obsolete submission archive have been removed.
 Submit `bayesfilter.py` and optionally `pacmanagent.py`; the original archive
@@ -23,7 +29,7 @@ files and engine outside the repository. The protected filter methods remain
 unchanged. Install analysis dependencies from `../requirements.txt` in your
 chosen environment; no packages were installed into the existing environment.
 
-Validation: six model/filter tests and PEP8 checks pass for both submission
+Validation: model/filter tests and PEP8 checks pass for both submission
 files and the experiment/analysis scripts. Baseline data are in `review_out/`
 (180 complete 200-step trials); figures and 95% confidence intervals are in
 `review_figs/`. Follow-up data are in `convergence_out/` (20 complete

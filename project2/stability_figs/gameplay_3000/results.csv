@@ -1,0 +1,13 @@
+layout,ghost,variance,nghosts,protocol,metric,earlier_window,later_window,earlier_mean,later_mean,delta,low,high,margin,n_total,n_complete,status
+large_filter_walls,confused,1.0,1,gameplay_truth_avoiding_walker,entropy,1,2,2.5172963148571434,2.459997440857142,-0.05729887400000137,-0.24422816571088402,0.1296304177108813,0.1,10,7,incomplete_data
+large_filter_walls,confused,1.0,1,gameplay_truth_avoiding_walker,exp_dist,1,2,2.574645453428571,2.4604506114285725,-0.11419484199999916,-0.661715382740316,0.4333256987403177,0.25,10,7,incomplete_data
+large_filter_walls,confused,1.0,1,gameplay_truth_avoiding_walker,entropy,1,3,2.5172963148571434,2.4688011157142853,-0.0484951991428579,-0.5205857379009501,0.4235953396152343,0.1,10,7,incomplete_data
+large_filter_walls,confused,1.0,1,gameplay_truth_avoiding_walker,exp_dist,1,3,2.574645453428571,2.558418768,-0.016226685428570736,-0.9145565075594757,0.8821031367023342,0.25,10,7,incomplete_data
+large_filter_walls,confused,1.0,1,gameplay_truth_avoiding_walker,entropy,2,3,2.459997440857142,2.4688011157142853,0.00880367485714346,-0.3427741076981055,0.3603814574123924,0.1,10,7,incomplete_data
+large_filter_walls,confused,1.0,1,gameplay_truth_avoiding_walker,exp_dist,2,3,2.4604506114285725,2.558418768,0.09796815657142842,-0.5750530439478342,0.770989357090691,0.25,10,7,incomplete_data
+large_filter_walls,confused,4.0,1,gameplay_truth_avoiding_walker,entropy,1,2,3.8454612174285723,3.7300353734285716,-0.11542584400000079,-0.44488343266075375,0.2140317446607522,0.1,10,7,incomplete_data
+large_filter_walls,confused,4.0,1,gameplay_truth_avoiding_walker,exp_dist,1,2,3.2123716285714283,3.186336321714287,-0.026035306857141918,-0.78584499968286,0.7337743859685761,0.25,10,7,incomplete_data
+large_filter_walls,confused,4.0,1,gameplay_truth_avoiding_walker,entropy,1,3,3.8454612174285723,3.675997998285713,-0.16946321914285903,-0.6215809773171113,0.28265453903139315,0.1,10,7,incomplete_data
+large_filter_walls,confused,4.0,1,gameplay_truth_avoiding_walker,exp_dist,1,3,3.2123716285714283,3.1831472968571433,-0.029224331714285512,-0.9475943113620007,0.8891456479334297,0.25,10,7,incomplete_data
+large_filter_walls,confused,4.0,1,gameplay_truth_avoiding_walker,entropy,2,3,3.7300353734285716,3.675997998285713,-0.054037375142858224,-0.3762421143620585,0.26816736407634206,0.1,10,7,incomplete_data
+large_filter_walls,confused,4.0,1,gameplay_truth_avoiding_walker,exp_dist,2,3,3.186336321714287,3.1831472968571433,-0.0031890248571435948,-0.6685028009804937,0.6621247512662066,0.25,10,7,incomplete_data

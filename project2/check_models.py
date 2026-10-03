@@ -124,6 +124,61 @@ class ModelChecks(unittest.TestCase):
         expected[1, 1] = expected[3, 1] = .5
         np.testing.assert_allclose(result, expected)
 
+    def test_optimized_update_matches_dense_equation(self):
+        """Exercise moving Pacman, wall changes and every ghost policy."""
+        rng = np.random.default_rng(45)
+        for kind in ('confused', 'afraid', 'scared'):
+            agent = self.agent(kind)
+            for _ in range(15):
+                mask = rng.random((5, 5)) < 0.3
+                mask[0, 0] = False
+                agent.walls = Grid(5, 5, False)
+                agent.walls.data = mask.tolist()
+                belief = rng.random((5, 5)) * ~mask
+                belief /= belief.sum()
+                pacman = tuple(rng.integers(0, 5, size=2))
+                evidence = int(rng.integers(-2, 12))
+                transition = agent._get_transition_model(pacman)
+                prior = np.tensordot(transition, belief,
+                                     axes=([2, 3], [0, 1]))
+                expected = prior * agent._get_sensor_model(pacman, evidence)
+                expected = (expected / expected.sum() if expected.sum() > 0
+                            else prior / prior.sum())
+                actual = agent._get_updated_belief(
+                    [belief], [evidence], pacman, [False])[0]
+                np.testing.assert_allclose(actual, expected, atol=1e-12)
+                self.assertAlmostEqual(actual.sum(), 1)
+                self.assertEqual(actual[mask].sum(), 0)
+
+    def test_replacement_transition_is_respected(self):
+        """Prediction uses the model returned by the required API call."""
+        agent = self.agent(variance=0)
+        agent._get_transition_model((0, 0))
+        transition = np.eye(25).reshape(5, 5, 5, 5)
+        agent._get_transition_model = lambda position: transition
+        belief = np.zeros((5, 5))
+        belief[1, 1] = 1
+        actual = agent._get_updated_belief(
+            [belief], [2], (0, 0), [False])[0]
+        np.testing.assert_array_equal(actual, belief)
+
+    def test_cached_sensor_matches_scipy_at_support_boundaries(self):
+        """Keep exact support, half-integer observations and large n."""
+        from scipy.stats import binom
+        agent = self.agent()
+        agent.walls[3][4] = True
+        x, y = np.indices((5, 5))
+        for n in (0, 1, 3, 4, 16, 5000):
+            agent.n = n
+            for pacman in ((0, 0), (1.5, 2)):
+                for evidence in (-1, 0, 2.5, 5, 8):
+                    distances = abs(x - pacman[0]) + abs(y - pacman[1])
+                    expected = binom.pmf(evidence - distances + n * 0.5,
+                                         n, 0.5)
+                    expected[3, 4] = 0
+                    np.testing.assert_array_equal(
+                        agent._get_sensor_model(pacman, evidence), expected)
+
 
 if __name__ == '__main__':
     unittest.main()

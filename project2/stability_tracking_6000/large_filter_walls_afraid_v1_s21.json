@@ -1,0 +1,16 @@
+{
+  "layout": "large_filter_walls",
+  "ghost": "afraid",
+  "variance": 1,
+  "actual_variance": 1.0,
+  "seed": 21,
+  "nghosts": 1,
+  "requested_steps": 6000,
+  "recorded_steps": 6000,
+  "complete": true,
+  "end_reason": "step_limit",
+  "protocol": "continuous_tracking_random_legal_pacman",
+  "collisions": "allowed_without_termination",
+  "pacman_uses_truth": false,
+  "prediction_backend": "cached_dense_api_sparse_prediction"
+}

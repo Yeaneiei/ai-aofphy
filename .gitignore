@@ -12,6 +12,7 @@ __pycache__/
 /project2/metrics.csv
 /project2/smoke_out/
 /project2/review_figs/mplconfig/
+/project2/stability_figs/mplconfig/
 /project2/review_figs/report_page_*.png
 /project2/review_figs/equation*.png
 
