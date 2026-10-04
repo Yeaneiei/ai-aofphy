@@ -7,8 +7,8 @@ import unittest
 
 import numpy as np
 
-from project2.convergence_check import audit, interval
-from project2.run_tracking_experiments import run_trial
+from project2._archive.convergence_check import audit, interval
+from project2._archive.run_tracking_experiments import run_trial
 
 
 class ConvergenceChecks(unittest.TestCase):

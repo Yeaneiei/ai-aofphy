@@ -15,10 +15,10 @@ from types import SimpleNamespace
 import numpy as np
 
 if __package__:
-    from .bayesfilter import BeliefStateAgent
-    from .pacman_module.ghostAgents import (
+    from ..bayesfilter import BeliefStateAgent
+    from ..pacman_module.ghostAgents import (
         AfraidGhost, ConfusedGhost, ScaredGhost)
-    from .pacman_module.layout import getLayout
+    from ..pacman_module.layout import getLayout
 else:
     from bayesfilter import BeliefStateAgent
     from pacman_module.ghostAgents import (

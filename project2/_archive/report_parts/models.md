@@ -129,3 +129,7 @@ course project, adapted from [UC Berkeley CS188](http://ai.berkeley.edu/).
   Residual late-window entropy drift remains; convergence is not claimed.
   See report.tex (historical notes), REVIEW.md and convergence_results.json.
   The instructor no longer requires a PDF report (October 3, 2026).
+  Question 3.c was also removed on October 4, 2026, including graphs,
+  error bars and its trial-count/duration requirement for metric convergence.
+  The historical experiment checks above are optional internal evidence,
+  not outstanding submission requirements. Question 2.a still applies.

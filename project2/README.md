@@ -1,63 +1,40 @@
 
 # Project II
 
-## Implementation status (October 3, 2026)
+## Current requirements (October 4, 2026)
 
-The new stability work uses a prespecified practical-equivalence check,
-not a claim that a flat-looking graph proves convergence. See
-`CONVERGENCE_PLAN.md` and `STABILITY_RESULTS.md` for protocols, margins,
-completed trial counts and the latest conclusions. Normal gameplay data
-and continuous tracking experiments are kept in separate folders.
+The instructor has removed all of question 3.c, including its graphs,
+error bars and requirement for enough trials/steps to demonstrate metric
+convergence, as confirmed by the user. No additional large experiment
+campaign is required for that retired question. Questions 3.a, 3.b and
+3.d–3.g remain; question 2.a still requires a correct Bayes filter whose
+belief eventually concentrates into an uncertainty area for each ghost.
+It does not prescribe 6,000 steps or the internal CI-equivalence margins.
 
-The instructor no longer requires a PDF report, as confirmed by the user.
-The PDF, PDF builder and obsolete submission archive have been removed.
-Submit `bayesfilter.py` and optionally `pacmanagent.py`; the original archive
-format below is retained until the instructor gives different packaging
-instructions. PDF page limits, template formatting and report compilation
-instructions no longer apply.
+Submit `bayesfilter.py` and optionally `pacmanagent.py` using the archive
+format below. A PDF report is also no longer required. Existing experiment
+data, plotting tools, analysis and historical notes are retained for
+reference and optional internal checks; they are not required deliverables
+or submission blockers under the retired question 3.c.
 
-The filter and optional belief-only controller are implemented. Historical
-`report.tex` and `template-project2.tex` are retained as reference notes;
-they are not required for execution or submission. Keep experiment data,
-analysis scripts and model notes for verification and explanation.
-
-Imports now support both standalone project folders and repository packages.
-From this folder, `python run.py` and `python run_experiments.py` no longer
-need PYTHONPATH. From the root, `python -m project2.run` also locates the
-bundled layouts. Standalone execution is tested by copying the submission
-files and engine outside the repository. The protected filter methods remain
-unchanged. Install analysis dependencies from `../requirements.txt` in your
-chosen environment; no packages were installed into the existing environment.
-
-Validation: model/filter tests and PEP8 checks pass for both submission
-files and the experiment/analysis scripts. Baseline data are in `review_out/`
-(180 complete 200-step trials); figures and 95% confidence intervals are in
-`review_figs/`. Follow-up data are in `convergence_out/` (20 complete
-1,000-step trials). Residual entropy drift remains, so convergence and full
-completion of the experimental requirement are not claimed. See `REVIEW.md`.
-
-PowerShell, from the repository root, using the existing conda environment:
+Check the filter from the repository root with the existing environment:
 
 ```powershell
 & 'C:\Users\Lenovo\miniconda3\envs\tf-env\python.exe' -m project2.check_models
 & 'C:\Users\Lenovo\miniconda3\envs\tf-env\python.exe' -m pycodestyle project2/bayesfilter.py project2/pacmanagent.py
-$env:PYTHONPATH = (Get-Location).Path
-$env:OPENBLAS_NUM_THREADS = '1'
-Set-Location project2
-& 'C:\Users\Lenovo\miniconda3\envs\tf-env\python.exe' run_experiments.py --trials 30 --steps 1000 --variances 0.25 1 4 --out next_experiments
-& 'C:\Users\Lenovo\miniconda3\envs\tf-env\python.exe' analyze.py --data next_experiments --burnin 500 --figs next_figs
 ```
-
-The analysis needs NumPy, SciPy, pandas, matplotlib, python-dateutil and six.
-The current tf-env lacks the last two; the existing bundled copies were
-loaded for this run using the command documented in `REVIEW.md`. New trials
-write a JSON sidecar recording actual length, ending reason, ghost count and
-actual sensor variance. Keep different ghost counts in separate analysis
-folders. The 30-trial/1,000-step suggestion is not a convergence guarantee.
 
 The instructor permits three members, as previously confirmed by the user.
 Team members are Pattraporn Joomnok (B6644932), Chayapha Leksungnoen (B6735173),
 and Arrirat Mungyotklang (B6739485), in the supplied order.
+
+## Folder layout
+
+Active files: `bayesfilter.py`, `pacmanagent.py`, `run.py`, `humanagent.py`,
+`sherlockpacman.py`, `check_models.py` and `pacman_module/`. Current
+requirements and team responsibilities are in this README and `WORK_PLAN.md`.
+Previous experiment data, plots, scripts and review notes are grouped in
+[`_archive/`](_archive/README.md); they are optional reference material.
 
 ## Table of contents
 
@@ -119,10 +96,7 @@ You are asked to answer the following questions:
 
  	- 3.a. - **1 point** - Provide a measure which summarizes Pacman's belief state (i.e., its uncertainty).
  	- 3.b. - **1 point** - Provide a measure of the quality of the belief state(s). You may assume access to the ground truth (i.e., the true position of the ghost(s)).
- 	- 3.c. - **3 points** - Run your filter implementation on the `/pacman_module/layouts/large_filter.lay` and the `/pacman_module/layouts/large_filter_walls.lay` layouts, against each type of ghost. Report your results graphically.
- 		 - Record your measures (see `_record_metrics` function in `bayesfilter.py`) averaged over several trials.
- 		 - Your results should come with error bars.
- 		 - The number of trials must be high enough and their duration long enough so that the measures have converged.
+    - 3.c. - **Removed by the instructor (October 4, 2026).** The experiment campaign, graphical results, error bars and trial-count/duration requirement formerly in this question are no longer required. Original question numbering is retained; no revised grading total has been confirmed.
  	- 3.d. - **1 points** - Discuss the effect of the ghost transition model parameter on its own behavior and on Pacman's belief state. Consider the two provided layouts. Motivate your answer by using your measures and the model itself. Use the default sensor variance.
  	- 3.e. - **1 points** - Discuss the effect of the sensor variance (as set through the `--sensorvariance` command line argument) on Pacman's belief state.
  	- 3.f. - **1 points** - How would you implement a Pacman controller to eat ghosts using only its current position, the set of legal actions and its current belief state?
